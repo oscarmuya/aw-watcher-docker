@@ -1,10 +1,10 @@
 # aw-watcher-docker
 
 
-[![CI](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/oscarokello2002/aw-watcher-docker/actions/workflows/ci.yml)
-[![Release](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/release.yml/badge.svg)](https://github.com/oscarokello2002/aw-watcher-docker/actions/workflows/release.yml)
-[![Latest Release](https://img.shields.io/github/v/release/oscarmuya/aw-watcher-docker?sort=semver)](https://github.com/oscarokello2002/aw-watcher-docker/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/oscarmuya/aw-watcher-docker/total)](https://github.com/oscarokello2002/aw-watcher-docker/releases)
+[![CI](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/ci.yaml)
+[![Release](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/release.yaml/badge.svg)](https://github.com/oscarmuya/aw-watcher-docker/actions/workflows/release.yaml)
+[![Latest Release](https://img.shields.io/github/v/release/oscarmuya/aw-watcher-docker?sort=semver)](https://github.com/oscarmuya/aw-watcher-docker/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/oscarmuya/aw-watcher-docker/total)](https://github.com/oscarmuya/aw-watcher-docker/releases)
 
 An [ActivityWatch](https://activitywatch.net/) watcher that tracks Docker container activity including runtime, CPU usage, and memory consumption.
 
