@@ -8,6 +8,40 @@
 
 An [ActivityWatch](https://activitywatch.net/) watcher that tracks Docker container activity including runtime, CPU usage, and memory consumption.
 
+## Install
+
+Linux and macOS:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/oscarmuya/aw-watcher-docker/main/install.sh | bash
+````
+
+Or with `wget`:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/oscarmuya/aw-watcher-docker/main/install.sh | bash
+```
+
+The installer downloads the latest release, installs `aw-watcher-docker` into `~/aw-modules`, and registers it in your `aw-tauri` config if it is not already present.
+
+Default module args:
+
+```toml
+{ name = "aw-watcher-docker", args = "--poll-time 10 --no-collect-stats" }
+```
+
+Restart ActivityWatch after installation so `aw-tauri` discovers and starts the watcher.
+
+
+For a safer copy-paste version, use this instead of piping directly to `bash`:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/oscarmuya/aw-watcher-docker/main/install.sh
+chmod +x install.sh
+./install.sh
+````
+
+
 ## What it tracks
 
 Each running container gets its own AW bucket (`aw-watcher-docker_<container_name>_<hostname>`). Events contain:
