@@ -28,13 +28,13 @@ jobs:
             bin: aw-watcher-docker
 
           - name: macos-x86_64
-            os: macos-13
+            os: macos-15-intel
             target: x86_64-apple-darwin
             archive: aw-watcher-docker-macos-x86_64.tar.gz
             bin: aw-watcher-docker
 
           - name: macos-aarch64
-            os: macos-14
+            os: macos-15
             target: aarch64-apple-darwin
             archive: aw-watcher-docker-macos-aarch64.tar.gz
             bin: aw-watcher-docker
