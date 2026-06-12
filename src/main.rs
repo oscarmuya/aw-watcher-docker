@@ -29,9 +29,15 @@ struct Args {
     #[arg(long, default_value_t = 5.0)]
     poll_time: f64,
 
-    /// Collect CPU and memory stats (slightly more expensive per poll)
-    #[arg(long, default_value_t = true)]
-    collect_stats: bool,
+    /// Disable CPU and memory stats collection (slightly more expensive per poll)
+    #[arg(long, default_value_t = false)]
+    no_collect_stats: bool,
+}
+
+impl Args {
+    fn collect_stats(&self) -> bool {
+        !self.no_collect_stats
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -230,11 +236,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     log::info!(
         "Polling every {:.1}s (stats collection: {})",
         args.poll_time,
-        args.collect_stats
+        args.collect_stats()
     );
 
     loop {
-        let snapshots = list_containers(&docker, args.collect_stats).await;
+        let snapshots = list_containers(&docker, args.collect_stats()).await;
 
         if snapshots.is_empty() {
             log::debug!("No containers found");

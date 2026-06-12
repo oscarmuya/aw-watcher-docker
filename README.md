@@ -43,7 +43,7 @@ Binary will be at `target/release/aw-watcher-docker`.
 ./target/release/aw-watcher-docker
 
 # Custom poll interval, no stats (faster, less overhead)
-./target/release/aw-watcher-docker --poll-time 10 --collect-stats false
+./target/release/aw-watcher-docker --poll-time 10 --no-collect-stats
 
 # Custom AW server
 ./target/release/aw-watcher-docker --host localhost --port 5600

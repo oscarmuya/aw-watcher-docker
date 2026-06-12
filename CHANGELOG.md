@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.1
+
+### Changed
+
+- Replaced the awkward `--collect-stats false` CLI usage with `--no-collect-stats`.
+
 ## v0.1.0
 
 Initial release.
