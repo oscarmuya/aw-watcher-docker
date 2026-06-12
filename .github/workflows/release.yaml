@@ -1,0 +1,125 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+  BIN_NAME: aw-watcher-docker
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x86_64
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: aw-watcher-docker-linux-x86_64.tar.gz
+            bin: aw-watcher-docker
+
+          - name: macos-x86_64
+            os: macos-13
+            target: x86_64-apple-darwin
+            archive: aw-watcher-docker-macos-x86_64.tar.gz
+            bin: aw-watcher-docker
+
+          - name: macos-aarch64
+            os: macos-14
+            target: aarch64-apple-darwin
+            archive: aw-watcher-docker-macos-aarch64.tar.gz
+            bin: aw-watcher-docker
+
+          - name: windows-x86_64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: aw-watcher-docker-windows-x86_64.zip
+            bin: aw-watcher-docker.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build release binary
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Prepare artifact
+        shell: bash
+        run: |
+          mkdir -p dist/${{ matrix.name }}
+          cp target/${{ matrix.target }}/release/${{ matrix.bin }} dist/${{ matrix.name }}/
+
+          cat > dist/${{ matrix.name }}/README.txt <<'EOF'
+          aw-watcher-docker
+
+          Install:
+            1. Copy this binary somewhere on your PATH.
+            2. Make it executable on Linux/macOS:
+                 chmod +x aw-watcher-docker
+            3. Add it to ActivityWatch autostart modules.
+
+          Example aw-qt.toml:
+
+            [aw-qt]
+            autostart_modules = [
+              "aw-server-rust",
+              "aw-watcher-afk",
+              "aw-watcher-window",
+              "aw-watcher-docker"
+            ]
+
+          ActivityWatch discovers executable aw-* modules from bundled folders and PATH.
+          EOF
+
+      - name: Archive Unix artifact
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          cd dist/${{ matrix.name }}
+          tar -czf ../${{ matrix.archive }} .
+
+      - name: Archive Windows artifact
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "dist/${{ matrix.name }}/*" -DestinationPath "dist/${{ matrix.archive }}"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: dist/${{ matrix.archive }}
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
